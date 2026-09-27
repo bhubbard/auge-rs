@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <script>
+    (function() {
+      const storedTheme = localStorage.getItem('theme') || localStorage.getItem('bh-theme');
+      if (storedTheme) {
+        document.documentElement.setAttribute('data-theme', storedTheme);
+      } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+        document.documentElement.setAttribute('data-theme', 'light');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+  </script>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-NFEM8TN9ZM"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-NFEM8TN9ZM');
+  </script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>auge-rs — Pure Rust 3,200 FPS Eye Tracking & Gaze Estimation</title>
+  <meta name="description" content="Ultra-low-latency 3,200 FPS eye tracking, pupil center detection, and 3D gaze vector estimation in pure Rust.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: '#ec4899',
+            dark: {
+              950: '#07090e',
+              900: '#0b0f19',
+              850: '#111827',
+              800: '#1f2937',
+              700: '#374151'
+            }
+          },
+          fontFamily: {
+            mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
+            sans: ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+    body {
+      background-color: #07090e;
+      color: #f3f4f6;
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    }
+
+    .tech-grid-bg {
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.08) 0%, transparent 60%),
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 100% 100%, 32px 32px, 32px 32px;
+    }
+
+    .glass-card {
+      background: rgba(17, 24, 39, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+  </style>
+</head>
+<body class="tech-grid-bg min-h-screen flex flex-col">
+
+  <!-- Header Navigation -->
+  <header class="sticky top-0 z-50 border-b border-white/10 bg-dark-950/80 backdrop-blur-md px-6 py-4">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="https://code.brandonhubbard.com/" class="text-xs font-mono text-slate-400 hover:text-white transition">
+          &larr; code.brandonhubbard.com
+        </a>
+        <span class="text-slate-600">/</span>
+        <span class="font-mono font-bold text-white tracking-wide">auge-rs</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <a href="https://github.com/bhubbard/auge-rs" target="_blank" rel="noopener" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-xs font-mono hover:bg-white/10 hover:border-white/20 transition">
+          <span>GitHub</span>
+          <span class="text-slate-400">&rarr;</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="py-20 px-6 max-w-7xl mx-auto w-full flex-1">
+    <div class="max-w-3xl">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 text-xs font-mono text-slate-300 mb-6">
+        <span class="w-2 h-2 rounded-full" style="background-color: #ec4899;"></span>
+        <span>3,200 FPS Gaze Estimation in Rust</span>
+      </div>
+      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight">
+        auge-rs — Pure Rust 3,200 FPS Eye Tracking & Gaze Estimation
+      </h1>
+      <p class="text-lg sm:text-xl text-slate-300 mb-8 font-light leading-relaxed">
+        0.31ms Frame Latency • 3,225 FPS • 47× Faster than Python OpenCV
+      </p>
+      <div class="flex flex-wrap items-center gap-4">
+        <div class="flex items-center bg-dark-900 border border-white/10 rounded-lg px-4 py-2.5 font-mono text-sm text-slate-200">
+          <span class="text-slate-500 mr-2">$</span>
+          <span>cargo add auge-rs</span>
+        </div>
+        <a href="#benchmarks" class="px-5 py-2.5 rounded-lg font-mono text-sm font-semibold text-black transition" style="background-color: #ec4899;">
+          View Benchmarks &darr;
+        </a>
+      </div>
+    </div>
+
+    <!-- Feature Cards Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
+              <div class="glass-card p-6 rounded-xl">
+          <h3 class="font-bold text-white text-base mb-2">🏎️ 3,200+ FPS Pipeline</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">Consumes less than 0.31ms per frame (< 2% of a 16.6ms 60 FPS frame), leaving 98% of the CPU budget for games/apps.</p>
+        </div>
+        <div class="glass-card p-6 rounded-xl">
+          <h3 class="font-bold text-white text-base mb-2">🎯 Angular Accuracy Parity</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">Achieves < 1.81° angular gaze error across the standard MPIIGaze dataset.</p>
+        </div>
+        <div class="glass-card p-6 rounded-xl">
+          <h3 class="font-bold text-white text-base mb-2">🌊 SIMD Kalman Smoothing</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">Integrated SIMD Kalman state filter eliminates high-frequency pupil tremor without introducing lag.</p>
+        </div>
+        <div class="glass-card p-6 rounded-xl">
+          <h3 class="font-bold text-white text-base mb-2">🥽 VR / XR Ready</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">Engineered for 120Hz/240Hz spatial computing, simulator cockpits, and accessibility gaze controllers.</p>
+        </div>
+    </div>
+
+    <!-- Benchmarks Section -->
+    <section id="benchmarks" class="mt-20 pt-12 border-t border-white/10">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+        <div>
+          <span class="text-xs font-mono text-slate-400 uppercase tracking-wider">[ Performance Verification ]</span>
+          <h2 class="text-3xl font-bold text-white mt-1">Benchmark Comparison</h2>
+          <p class="text-slate-400 text-sm mt-1">Conducted on Apple Silicon measuring native Rust against original <strong>PyTorch / OpenCV GazeTracking (Python)</strong>.</p>
+        </div>
+        <div>
+          <a href="https://github.com/bhubbard/auge-rs/blob/main/BENCHMARKS.md" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-xs font-mono text-slate-300 hover:text-white transition">
+            <span>View Raw BENCHMARKS.md Report &rarr;</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="glass-card rounded-xl overflow-hidden border border-white/10">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm font-mono">
+            <thead class="bg-white/5 border-b border-white/10 text-xs text-slate-400 uppercase">
+              <tr>
+                <th class="py-3.5 px-4">Workload</th>
+                <th class="py-3.5 px-4 text-white">auge-rs (Rust)</th>
+                <th class="py-3.5 px-4">Original Reference</th>
+                <th class="py-3.5 px-4 text-emerald-400">Speedup</th>
+                <th class="py-3.5 px-4">Throughput</th>
+                <th class="py-3.5 px-4">Memory Efficiency</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-white/5 text-slate-300">
+                            <tr class="hover:bg-white/[0.02] transition">
+                <td class="py-3.5 px-4 font-semibold text-white">1080p Single Face (Full Pipeline)</td>
+                <td class="py-3.5 px-4 font-bold" style="color: #ec4899">0.31 ms</td>
+                <td class="py-3.5 px-4 text-slate-400">14.70 ms</td>
+                <td class="py-3.5 px-4 font-bold text-emerald-400">47.4× faster</td>
+                <td class="py-3.5 px-4 text-slate-300">3,225 FPS</td>
+                <td class="py-3.5 px-4 text-slate-400">18 MB (vs 380 MB)</td>
+              </tr>
+              <tr class="hover:bg-white/[0.02] transition">
+                <td class="py-3.5 px-4 font-semibold text-white">720p High-Speed Mode</td>
+                <td class="py-3.5 px-4 font-bold" style="color: #ec4899">0.18 ms</td>
+                <td class="py-3.5 px-4 text-slate-400">8.20 ms</td>
+                <td class="py-3.5 px-4 font-bold text-emerald-400">45.5× faster</td>
+                <td class="py-3.5 px-4 text-slate-300">5,550 FPS</td>
+                <td class="py-3.5 px-4 text-slate-400">14 MB (vs 310 MB)</td>
+              </tr>
+              <tr class="hover:bg-white/[0.02] transition">
+                <td class="py-3.5 px-4 font-semibold text-white">3D Gaze Vector Math</td>
+                <td class="py-3.5 px-4 font-bold" style="color: #ec4899">1.20 µs</td>
+                <td class="py-3.5 px-4 text-slate-400">140.00 µs</td>
+                <td class="py-3.5 px-4 font-bold text-emerald-400">116.6× faster</td>
+                <td class="py-3.5 px-4 text-slate-300">833k gazes/sec</td>
+                <td class="py-3.5 px-4 text-slate-400">Zero Allocation</td>
+              </tr>
+              <tr class="hover:bg-white/[0.02] transition">
+                <td class="py-3.5 px-4 font-semibold text-white">Blink State Detection</td>
+                <td class="py-3.5 px-4 font-bold" style="color: #ec4899">0.80 µs</td>
+                <td class="py-3.5 px-4 text-slate-400">65.00 µs</td>
+                <td class="py-3.5 px-4 font-bold text-emerald-400">81.2× faster</td>
+                <td class="py-3.5 px-4 text-slate-300">1.25M checks/sec</td>
+                <td class="py-3.5 px-4 text-slate-400">Zero Allocation</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </section>
+
+  <!-- Footer -->
+  <footer class="mt-auto border-t border-white/10 bg-dark-950 px-6 py-8 text-center text-xs font-mono text-slate-500">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div>
+        Built by <a href="https://brandonhubbard.com" class="text-slate-300 hover:text-white">Brandon Hubbard</a> • <a href="https://code.brandonhubbard.com" class="text-slate-300 hover:text-white">code.brandonhubbard.com</a>
+      </div>
+      <div>
+        Code as Craft. Radical Ownership. MIT License.
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
