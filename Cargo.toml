@@ -1,0 +1,32 @@
+[package]
+name = "auge-rs"
+version = "0.1.0"
+edition = "2021"
+authors = ["Brandon Hubbard <bhubbard@users.noreply.github.com>"]
+description = "Apple's on-device Vision framework from the command line ported to native Rust (OCR, classification, barcodes, faces, pose, saliency, document parsing)"
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/bhubbard/auge-rs"
+keywords = ["vision", "apple-vision", "ocr", "cli", "computer-vision"]
+categories = ["command-line-utilities", "multimedia::images", "computer-vision"]
+
+[lib]
+name = "auge_rs"
+path = "src/lib.rs"
+
+[[bin]]
+name = "auge"
+path = "src/bin/auge.rs"
+
+[dependencies]
+clap = { version = "4.5", features = ["derive", "env"] }
+tokio = { version = "1.40", features = ["full"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = { version = "1.0" }
+thiserror = "2.0"
+regex = "1.11"
+async-trait = "0.1"
+tempfile = "3.10"
+
+[build-dependencies]
+cc = "1.0"
