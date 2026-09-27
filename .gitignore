@@ -1,4 +1,5 @@
 /target
+coverage_report
 bridge/apple_vision_bridge
 **/*.rs.bk
 .DS_Store

@@ -3,6 +3,8 @@
 [![macOS 26+](https://img.shields.io/badge/macOS-26%2B%20(Tahoe)-000000?logo=apple&logoColor=white)](https://developer.apple.com/macos/)
 [![Rust 2021](https://img.shields.io/badge/rust-edition%202021-orange.svg)](Cargo.toml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![GitHub Pages](https://img.shields.io/badge/docs-GitHub%20Pages-blue.svg)](https://bhubbard.github.io/auge-rs/)
+[![Coverage Report](https://img.shields.io/badge/coverage-HTML%20Report-brightgreen.svg)](https://bhubbard.github.io/auge-rs/)
 [![100% On-Device](https://img.shields.io/badge/privacy-100%25%20on--device-green)](https://developer.apple.com/documentation/vision)
 
 **Apple's on-device Vision framework from the command line ported to native Rust.**  
