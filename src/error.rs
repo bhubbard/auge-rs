@@ -1,5 +1,4 @@
-
-#[derive(Debug, thiserror::Error, PartialEq, Eq)]
+#[derive(Debug, thiserror::Error, PartialEq, Eq, Clone)]
 pub enum AugeError {
     #[error("File not found: {0}")]
     FileNotFound(String),
@@ -36,6 +35,31 @@ pub enum AugeError {
 }
 
 impl AugeError {
+    pub fn classify(desc: &str) -> Self {
+        let lower = desc.to_lowercase();
+        if lower.contains("no such file")
+            || lower.contains("file not found")
+            || lower.contains("doesn't exist")
+        {
+            return AugeError::FileNotFound(desc.to_string());
+        }
+        if lower.contains("could not be decoded")
+            || lower.contains("invalid image")
+            || lower.contains("corrupt")
+        {
+            return AugeError::InvalidImage;
+        }
+        if lower.contains("unsupported") && (lower.contains("format") || lower.contains("image")) {
+            return AugeError::UnsupportedFormat(desc.to_string());
+        }
+        if lower.contains("vision")
+            && (lower.contains("not available") || lower.contains("unavailable"))
+        {
+            return AugeError::VisionUnavailable;
+        }
+        AugeError::Unknown(desc.to_string())
+    }
+
     pub fn exit_code(&self) -> i32 {
         match self {
             AugeError::FileNotFound(_) => 1,
@@ -65,6 +89,10 @@ impl AugeError {
             AugeError::Usage(_) => "[usage error]",
             AugeError::Unknown(_) | AugeError::Io(_) => "[error]",
         }
+    }
+
+    pub fn user_message(&self) -> String {
+        self.to_string()
     }
 }
 

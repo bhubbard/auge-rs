@@ -10,6 +10,48 @@ pub enum ImageSource {
 }
 
 impl ImageSource {
+    pub const SUPPORTED_EXTENSIONS: &[&str] = &[
+        "png", "jpg", "jpeg", "tiff", "tif", "bmp", "gif", "heic", "heif", "pdf",
+    ];
+
+    pub fn is_supported_extension(ext: &str) -> bool {
+        let lower = ext.trim().to_lowercase();
+        Self::SUPPORTED_EXTENSIONS.contains(&lower.as_str())
+    }
+
+    pub fn extension_from(path: &str) -> Option<String> {
+        let p = Path::new(path);
+        let file_name = p.file_name()?.to_str()?;
+
+        // If file_name starts with a dot and has no other dot, it's a dotfile with no extension
+        if file_name.starts_with('.') && !file_name[1..].contains('.') {
+            return None;
+        }
+
+        p.extension()
+            .and_then(|ext| ext.to_str())
+            .map(|ext| ext.to_lowercase())
+    }
+
+    pub fn validate_path(path: &str) -> Result<PathBuf, AugeError> {
+        if path.is_empty() {
+            return Err(AugeError::FileNotFound(path.to_string()));
+        }
+
+        let p = PathBuf::from(path);
+        if !p.exists() || p.is_dir() {
+            return Err(AugeError::FileNotFound(path.to_string()));
+        }
+
+        if let Some(ext) = Self::extension_from(path) {
+            if !Self::is_supported_extension(&ext) {
+                return Err(AugeError::UnsupportedFormat(ext));
+            }
+        }
+
+        Ok(p)
+    }
+
     pub fn path(&self) -> &Path {
         match self {
             ImageSource::FilePath(p) => p.as_path(),
@@ -33,14 +75,10 @@ impl ImageSource {
         }
 
         if let Some(p) = path {
-            let path_buf = PathBuf::from(p);
-            if !path_buf.exists() {
-                return Err(AugeError::FileNotFound(p.to_string()));
-            }
+            let path_buf = Self::validate_path(p)?;
             return Ok(ImageSource::FilePath(path_buf));
         }
 
-        // Stdin input
         Self::from_stdin()
     }
 
@@ -60,7 +98,6 @@ impl ImageSource {
     }
 
     fn from_clipboard() -> Result<Self, AugeError> {
-        // macOS pbpaste / osascript clipboard image extraction
         let output = Command::new("osascript")
             .args([
                 "-e",
