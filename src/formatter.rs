@@ -1,5 +1,6 @@
 use crate::types::{AnalysisMode, OutputFormat};
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub struct ResultFormatter;
 
 impl ResultFormatter {

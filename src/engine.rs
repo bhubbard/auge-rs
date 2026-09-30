@@ -3,6 +3,7 @@ use crate::types::AnalysisMode;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
+#[derive(Debug, Clone)]
 pub struct VisionAnalyzer {
     bridge_path: Option<PathBuf>,
 }

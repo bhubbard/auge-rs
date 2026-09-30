@@ -4,6 +4,7 @@ use std::path::{Path, PathBuf};
 use std::process::Command;
 use tempfile::NamedTempFile;
 
+#[derive(Debug)]
 pub enum ImageSource {
     FilePath(PathBuf),
     TempFile(NamedTempFile),

@@ -9,6 +9,7 @@ static MULTI_SPACE_REGEX: LazyLock<Regex> = LazyLock::new(|| {
     Regex::new(r"[ \t]+").unwrap()
 });
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub struct CleanChunker;
 
 impl CleanChunker {
@@ -74,6 +75,7 @@ impl CleanChunker {
     }
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub struct Cleaner;
 
 impl Cleaner {
